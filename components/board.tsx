@@ -46,42 +46,62 @@ export default function Board () {
   };
 
   return (
-    <table>
-      <tbody>
-        <tr>
-          <td>
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td className="vert">
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td>
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-        </tr>
-        <tr>
-          <td className="hori">
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td className="vert hori">
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td className="hori">
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td className="vert">
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-          <td>
-            <Square turnPlayerName={turnPlayer} changeTurn={(playerName: string) => setTurnPlayer(playerName)}/>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div onClick={handleReset} style={{ position: 'relative' }}>
+      <table style={{ opacity: gameOver ? 0.5 : 1 }}>
+        <tbody>
+          <tr>
+            <td>
+              <Square value={squares[0]} onClick={() => handleClick(0)}/>
+            </td>
+            <td className="vert">
+              <Square value={squares[1]} onClick={() => handleClick(1)}/>
+            </td>
+            <td>
+              <Square value={squares[2]} onClick={() => handleClick(2)}/>
+            </td>
+          </tr>
+          <tr>
+            <td className="hori">
+              <Square value={squares[3]} onClick={() => handleClick(3)}/>
+            </td>
+            <td className="vert hori">
+              <Square value={squares[4]} onClick={() => handleClick(4)}/>
+            </td>
+            <td className="hori">
+              <Square value={squares[5]} onClick={() => handleClick(5)}/>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <Square value={squares[6]} onClick={() => handleClick(6)}/>
+            </td>
+            <td className="vert">
+              <Square value={squares[7]} onClick={() => handleClick(7)}/>
+            </td>
+            <td>
+              <Square value={squares[8]} onClick={() => handleClick(8)}/>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      {gameOver && (
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+          color: 'white',
+          padding: '30px 50px',
+          borderRadius: '10px',
+          fontSize: '32px',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          pointerEvents: 'none'
+        }}>
+          {winner ? `${winner} won!` : 'Draw!'}
+        </div>
+      )}
+    </div>
   )
 }
