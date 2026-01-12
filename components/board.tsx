@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Square from "./square";
 
 function calculateWinner(squares: string[]): string | null {
@@ -21,7 +21,19 @@ function calculateWinner(squares: string[]): string | null {
   return null;
 }
 
-export default function Board () {
+function getRandomMove(squares: string[]): number {
+  const emptySquares = squares
+    .map((val, idx) => val === "" ? idx : -1)
+    .filter(idx => idx !== -1);
+  return emptySquares[Math.floor(Math.random() * emptySquares.length)];
+}
+
+interface BoardProps {
+  opponentType: 'human' | 'ai';
+  setGameState: (state: 'idle' | 'playing' | 'ended') => void;
+}
+
+export default function Board ({ opponentType, setGameState }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   const [turnPlayer, setTurnPlayer] = useState("X");
   
@@ -29,8 +41,38 @@ export default function Board () {
   const isDraw = !winner && squares.every(square => square !== "");
   const gameOver = winner || isDraw;
 
+  // Update game state
+  useEffect(() => {
+    if (gameOver) {
+      setGameState('ended');
+    } else if (squares.some(square => square !== "")) {
+      setGameState('playing');
+    } else {
+      setGameState('idle');
+    }
+  }, [squares, gameOver, setGameState]);
+
+  // AI move logic
+  useEffect(() => {
+    if (opponentType === 'ai' && turnPlayer === 'O' && !gameOver) {
+      const timer = setTimeout(() => {
+        const aiMove = getRandomMove(squares);
+        if (aiMove !== undefined && aiMove !== -1) {
+          const newSquares = squares.slice();
+          newSquares[aiMove] = 'O';
+          setSquares(newSquares);
+          setTurnPlayer('X');
+        }
+      }, 500); // Small delay to make AI move visible
+      return () => clearTimeout(timer);
+    }
+  }, [opponentType, turnPlayer, squares, gameOver]);
+
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
+    
+    // In AI mode, only allow player X to click
+    if (opponentType === 'ai' && turnPlayer === 'O') return;
     
     const newSquares = squares.slice();
     newSquares[index] = turnPlayer;
