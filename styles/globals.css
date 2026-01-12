@@ -41,6 +41,21 @@ table {
   font-size: 64px;
 }
 
+.control-area {
+  min-width: 200px;
+  min-height: 100px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.control-area-title {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+}
+
 @media screen and (max-width: 500px) {
   table {
     border-spacing: 0;
@@ -61,5 +76,9 @@ table {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .control-area {
+    min-width: 100%;
   }
 }

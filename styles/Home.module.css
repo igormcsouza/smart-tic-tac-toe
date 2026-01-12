@@ -7,3 +7,29 @@
   align-items: center;
   height: 100vh;
 }
+
+.gameLayout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+  }
+
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gameLayout {
+    /* Use column-reverse to display board above control area on mobile */
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+}
