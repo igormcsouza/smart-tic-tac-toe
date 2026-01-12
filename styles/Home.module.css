@@ -30,6 +30,7 @@
   }
 
   .gameLayout {
+    /* Use column-reverse to display board above control area on mobile */
     flex-direction: column-reverse;
     gap: 1rem;
   }
