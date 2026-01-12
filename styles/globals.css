@@ -39,6 +39,12 @@ table {
     width: 75px;
     height: 75px;
   }
+  
+  .square {
+    font-size: 32px;
+    padding: 0;
+    line-height: 75px;
+  }
 }
 
 .square {
