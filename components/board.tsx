@@ -25,6 +25,7 @@ function getRandomMove(squares: string[]): number {
   const emptySquares = squares
     .map((val, idx) => val === "" ? idx : -1)
     .filter(idx => idx !== -1);
+  if (emptySquares.length === 0) return -1;
   return emptySquares[Math.floor(Math.random() * emptySquares.length)];
 }
 
