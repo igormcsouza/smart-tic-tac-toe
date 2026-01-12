@@ -58,7 +58,7 @@ export default function Board ({ opponentType, setGameState }: BoardProps) {
     if (opponentType === 'ai' && turnPlayer === 'O' && !gameOver) {
       const timer = setTimeout(() => {
         const aiMove = getRandomMove(squares);
-        if (aiMove !== undefined && aiMove !== -1) {
+        if (aiMove !== -1) {
           const newSquares = squares.slice();
           newSquares[aiMove] = 'O';
           setSquares(newSquares);
