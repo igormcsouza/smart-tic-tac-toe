@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Square from "./square";
 
 function calculateWinner(squares: string[]): string | null {
@@ -32,15 +32,31 @@ function getRandomMove(squares: string[]): number {
 interface BoardProps {
   opponentType: 'human' | 'ai';
   setGameState: (state: 'idle' | 'playing' | 'ended') => void;
+  startingPlayer: 'X' | 'O';
 }
 
-export default function Board ({ opponentType, setGameState }: BoardProps) {
+export default function Board ({ opponentType, setGameState, startingPlayer }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
-  const [turnPlayer, setTurnPlayer] = useState("X");
+  const [turnPlayer, setTurnPlayer] = useState(startingPlayer);
   
   const winner = calculateWinner(squares);
   const isDraw = !winner && squares.every(square => square !== "");
   const gameOver = winner || isDraw;
+
+  // Helper function to determine initial turn player
+  const getInitialTurnPlayer = useCallback(() => {
+    // In AI mode, if human chose O, the first turn is X (AI's turn)
+    // Otherwise, first turn matches the starting player
+    if (opponentType === 'ai' && startingPlayer === 'O') {
+      return 'X'; // AI goes first
+    }
+    return startingPlayer;
+  }, [opponentType, startingPlayer]);
+
+  // Helper function to get AI's symbol (opposite of human's symbol)
+  const getAiSymbol = useCallback((): 'X' | 'O' => {
+    return startingPlayer === 'X' ? 'O' : 'X';
+  }, [startingPlayer]);
 
   // Update game state
   useEffect(() => {
@@ -55,25 +71,38 @@ export default function Board ({ opponentType, setGameState }: BoardProps) {
 
   // AI move logic
   useEffect(() => {
-    if (opponentType === 'ai' && turnPlayer === 'O' && !gameOver) {
-      const timer = setTimeout(() => {
-        const aiMove = getRandomMove(squares);
-        if (aiMove !== -1) {
-          const newSquares = squares.slice();
-          newSquares[aiMove] = 'O';
-          setSquares(newSquares);
-          setTurnPlayer('X');
-        }
-      }, 500); // Small delay to make AI move visible
-      return () => clearTimeout(timer);
+    if (opponentType === 'ai' && !gameOver) {
+      const aiSymbol = getAiSymbol();
+      
+      if (turnPlayer === aiSymbol) {
+        const timer = setTimeout(() => {
+          const aiMove = getRandomMove(squares);
+          if (aiMove !== -1) {
+            const newSquares = squares.slice();
+            newSquares[aiMove] = aiSymbol;
+            setSquares(newSquares);
+            setTurnPlayer(aiSymbol === 'X' ? 'O' : 'X');
+          }
+        }, 500); // Small delay to make AI move visible
+        return () => clearTimeout(timer);
+      }
     }
-  }, [opponentType, turnPlayer, squares, gameOver]);
+  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol]);
+
+  // Reset game when starting player changes
+  useEffect(() => {
+    setSquares(Array(9).fill(""));
+    setTurnPlayer(getInitialTurnPlayer());
+  }, [startingPlayer, opponentType, getInitialTurnPlayer]);
 
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
     
-    // In AI mode, only allow player X to click
-    if (opponentType === 'ai' && turnPlayer === 'O') return;
+    // In AI mode, prevent clicking when it's AI's turn
+    if (opponentType === 'ai') {
+      const aiSymbol = getAiSymbol();
+      if (turnPlayer === aiSymbol) return;
+    }
     
     const newSquares = squares.slice();
     newSquares[index] = turnPlayer;
@@ -84,7 +113,7 @@ export default function Board ({ opponentType, setGameState }: BoardProps) {
   const handleReset = () => {
     if (gameOver) {
       setSquares(Array(9).fill(""));
-      setTurnPlayer("X");
+      setTurnPlayer(getInitialTurnPlayer());
     }
   };
 
