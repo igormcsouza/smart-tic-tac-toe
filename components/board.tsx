@@ -32,11 +32,12 @@ function getRandomMove(squares: string[]): number {
 interface BoardProps {
   opponentType: 'human' | 'ai';
   setGameState: (state: 'idle' | 'playing' | 'ended') => void;
+  startingPlayer: 'X' | 'O';
 }
 
-export default function Board ({ opponentType, setGameState }: BoardProps) {
+export default function Board ({ opponentType, setGameState, startingPlayer }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
-  const [turnPlayer, setTurnPlayer] = useState("X");
+  const [turnPlayer, setTurnPlayer] = useState(startingPlayer);
   
   const winner = calculateWinner(squares);
   const isDraw = !winner && squares.every(square => square !== "");
@@ -69,6 +70,12 @@ export default function Board ({ opponentType, setGameState }: BoardProps) {
     }
   }, [opponentType, turnPlayer, squares, gameOver]);
 
+  // Reset game when starting player changes
+  useEffect(() => {
+    setSquares(Array(9).fill(""));
+    setTurnPlayer(startingPlayer);
+  }, [startingPlayer]);
+
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
     
@@ -84,7 +91,7 @@ export default function Board ({ opponentType, setGameState }: BoardProps) {
   const handleReset = () => {
     if (gameOver) {
       setSquares(Array(9).fill(""));
-      setTurnPlayer("X");
+      setTurnPlayer(startingPlayer);
     }
   };
 

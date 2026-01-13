@@ -105,6 +105,16 @@ table {
   color: white;
 }
 
+.toggle-option.active.player-x {
+  background-color: #28a745;
+  color: white;
+}
+
+.toggle-option.active.player-o {
+  background-color: #ffc107;
+  color: white;
+}
+
 .toggle-option:not(.active):hover:not(:disabled) {
   background-color: rgba(255, 255, 255, 0.1);
 }

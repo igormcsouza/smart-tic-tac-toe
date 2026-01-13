@@ -7,6 +7,7 @@ import styles from '../styles/Home.module.css'
 const Home: NextPage = () => {
   const [opponentType, setOpponentType] = useState<'human' | 'ai'>('human')
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'ended'>('idle')
+  const [startingPlayer, setStartingPlayer] = useState<'X' | 'O'>('X')
 
   return (
     <div className={styles.container}>
@@ -15,10 +16,13 @@ const Home: NextPage = () => {
           opponentType={opponentType}
           setOpponentType={setOpponentType}
           gameState={gameState}
+          startingPlayer={startingPlayer}
+          setStartingPlayer={setStartingPlayer}
         />
         <Board 
           opponentType={opponentType}
           setGameState={setGameState}
+          startingPlayer={startingPlayer}
         />
       </div>
     </div>
