@@ -119,6 +119,69 @@ table {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.slider-label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.slider-value {
+  font-weight: bold;
+  color: #28a745;
+}
+
+.exploration-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #4a90e2, #9b59b6);
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.exploration-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: 2px solid #4a90e2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.exploration-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: 2px solid #4a90e2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.exploration-slider:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.exploration-slider:disabled::-webkit-slider-thumb {
+  cursor: not-allowed;
+}
+
+.exploration-slider:disabled::-moz-range-thumb {
+  cursor: not-allowed;
+}
+
+
 @media screen and (max-width: 500px) {
   table {
     border-spacing: 0;

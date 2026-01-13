@@ -4,11 +4,14 @@ interface ControlAreaProps {
   gameState: 'idle' | 'playing' | 'ended';
   startingPlayer: 'X' | 'O';
   setStartingPlayer: (player: 'X' | 'O') => void;
+  explorationRate: number;
+  setExplorationRate: (rate: number) => void;
 }
 
-export default function ControlArea({ opponentType, setOpponentType, gameState, startingPlayer, setStartingPlayer }: ControlAreaProps) {
+export default function ControlArea({ opponentType, setOpponentType, gameState, startingPlayer, setStartingPlayer, explorationRate, setExplorationRate }: ControlAreaProps) {
   const isToggleEnabled = gameState === 'idle' || gameState === 'ended';
   const isStartsWithEnabled = isToggleEnabled && opponentType === 'ai';
+  const isSliderEnabled = isStartsWithEnabled;
 
   return (
     <div className="control-area">
@@ -50,6 +53,21 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
             O
           </button>
         </div>
+      </div>
+      <div className="slider-container">
+        <label className="slider-label">
+          Exploration Rate: <span className="slider-value">{explorationRate.toFixed(2)}</span>
+        </label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.05"
+          value={explorationRate}
+          onChange={(e) => setExplorationRate(parseFloat(e.target.value))}
+          disabled={!isSliderEnabled}
+          className="exploration-slider"
+        />
       </div>
     </div>
   )

@@ -29,13 +29,55 @@ function getRandomMove(squares: string[]): number {
   return emptySquares[Math.floor(Math.random() * emptySquares.length)];
 }
 
+function getBestMove(squares: string[], aiSymbol: 'X' | 'O'): number {
+  const humanSymbol = aiSymbol === 'X' ? 'O' : 'X';
+  const emptySquares = squares
+    .map((val, idx) => val === "" ? idx : -1)
+    .filter(idx => idx !== -1);
+  
+  if (emptySquares.length === 0) return -1;
+
+  // 1. Try to win
+  for (const move of emptySquares) {
+    const testSquares = squares.slice();
+    testSquares[move] = aiSymbol;
+    if (calculateWinner(testSquares) === aiSymbol) {
+      return move;
+    }
+  }
+
+  // 2. Block opponent from winning
+  for (const move of emptySquares) {
+    const testSquares = squares.slice();
+    testSquares[move] = humanSymbol;
+    if (calculateWinner(testSquares) === humanSymbol) {
+      return move;
+    }
+  }
+
+  // 3. Take center if available
+  if (squares[4] === "") {
+    return 4;
+  }
+
+  // 4. Take a corner if available
+  const corners = [0, 2, 6, 8].filter(idx => squares[idx] === "");
+  if (corners.length > 0) {
+    return corners[Math.floor(Math.random() * corners.length)];
+  }
+
+  // 5. Take any available square
+  return emptySquares[Math.floor(Math.random() * emptySquares.length)];
+}
+
 interface BoardProps {
   opponentType: 'human' | 'ai';
   setGameState: (state: 'idle' | 'playing' | 'ended') => void;
   startingPlayer: 'X' | 'O';
+  explorationRate: number;
 }
 
-export default function Board ({ opponentType, setGameState, startingPlayer }: BoardProps) {
+export default function Board ({ opponentType, setGameState, startingPlayer, explorationRate }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   const [turnPlayer, setTurnPlayer] = useState(startingPlayer);
   
@@ -76,7 +118,21 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
       
       if (turnPlayer === aiSymbol) {
         const timer = setTimeout(() => {
-          const aiMove = getRandomMove(squares);
+          let aiMove: number;
+          
+          // Epsilon-greedy strategy:
+          // explorationRate controls the balance between exploration and exploitation
+          // - High explorationRate (e.g., 1.0): AI explores more with random moves
+          // - Low explorationRate (e.g., 0.0): AI exploits more with best strategic moves
+          // - Medium explorationRate (e.g., 0.5): Balanced approach
+          if (Math.random() < explorationRate) {
+            // Explore: make a random move
+            aiMove = getRandomMove(squares);
+          } else {
+            // Exploit: make the best strategic move
+            aiMove = getBestMove(squares, aiSymbol);
+          }
+          
           if (aiMove !== -1) {
             const newSquares = squares.slice();
             newSquares[aiMove] = aiSymbol;
@@ -87,7 +143,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
         return () => clearTimeout(timer);
       }
     }
-  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol]);
+  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol, explorationRate]);
 
   // Reset game when starting player changes
   useEffect(() => {
