@@ -56,31 +56,45 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
 
   // AI move logic
   useEffect(() => {
-    if (opponentType === 'ai' && turnPlayer === 'O' && !gameOver) {
-      const timer = setTimeout(() => {
-        const aiMove = getRandomMove(squares);
-        if (aiMove !== -1) {
-          const newSquares = squares.slice();
-          newSquares[aiMove] = 'O';
-          setSquares(newSquares);
-          setTurnPlayer('X');
-        }
-      }, 500); // Small delay to make AI move visible
-      return () => clearTimeout(timer);
+    if (opponentType === 'ai' && !gameOver) {
+      // Determine AI's symbol (opposite of human player's symbol)
+      const aiSymbol = startingPlayer === 'X' ? 'O' : 'X';
+      
+      if (turnPlayer === aiSymbol) {
+        const timer = setTimeout(() => {
+          const aiMove = getRandomMove(squares);
+          if (aiMove !== -1) {
+            const newSquares = squares.slice();
+            newSquares[aiMove] = aiSymbol;
+            setSquares(newSquares);
+            setTurnPlayer(aiSymbol === 'X' ? 'O' : 'X');
+          }
+        }, 500); // Small delay to make AI move visible
+        return () => clearTimeout(timer);
+      }
     }
-  }, [opponentType, turnPlayer, squares, gameOver]);
+  }, [opponentType, turnPlayer, squares, gameOver, startingPlayer]);
 
   // Reset game when starting player changes
   useEffect(() => {
     setSquares(Array(9).fill(""));
-    setTurnPlayer(startingPlayer);
-  }, [startingPlayer]);
+    // In AI mode, if human chose O, the first turn is X (AI's turn)
+    // Otherwise, first turn matches the starting player
+    if (opponentType === 'ai' && startingPlayer === 'O') {
+      setTurnPlayer('X'); // AI goes first
+    } else {
+      setTurnPlayer(startingPlayer);
+    }
+  }, [startingPlayer, opponentType]);
 
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
     
-    // In AI mode, only allow player X to click
-    if (opponentType === 'ai' && turnPlayer === 'O') return;
+    // In AI mode, determine AI's symbol and prevent clicking when it's AI's turn
+    if (opponentType === 'ai') {
+      const aiSymbol = startingPlayer === 'X' ? 'O' : 'X';
+      if (turnPlayer === aiSymbol) return;
+    }
     
     const newSquares = squares.slice();
     newSquares[index] = turnPlayer;
@@ -91,7 +105,13 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   const handleReset = () => {
     if (gameOver) {
       setSquares(Array(9).fill(""));
-      setTurnPlayer(startingPlayer);
+      // In AI mode, if human chose O, the first turn is X (AI's turn)
+      // Otherwise, first turn matches the starting player
+      if (opponentType === 'ai' && startingPlayer === 'O') {
+        setTurnPlayer('X'); // AI goes first
+      } else {
+        setTurnPlayer(startingPlayer);
+      }
     }
   };
 

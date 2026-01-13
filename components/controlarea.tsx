@@ -8,6 +8,7 @@ interface ControlAreaProps {
 
 export default function ControlArea({ opponentType, setOpponentType, gameState, startingPlayer, setStartingPlayer }: ControlAreaProps) {
   const isToggleEnabled = gameState === 'idle' || gameState === 'ended';
+  const isStartsWithEnabled = isToggleEnabled && opponentType === 'ai';
 
   return (
     <div className="control-area">
@@ -33,18 +34,18 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
       </div>
       <div className="toggle-container">
         <label className="toggle-label">Starts with:</label>
-        <div className={`toggle-switch ${!isToggleEnabled ? 'disabled' : ''}`}>
+        <div className={`toggle-switch ${!isStartsWithEnabled ? 'disabled' : ''}`}>
           <button
             className={`toggle-option ${startingPlayer === 'X' ? 'active player-x' : ''}`}
-            onClick={() => isToggleEnabled && setStartingPlayer('X')}
-            disabled={!isToggleEnabled}
+            onClick={() => isStartsWithEnabled && setStartingPlayer('X')}
+            disabled={!isStartsWithEnabled}
           >
             X
           </button>
           <button
             className={`toggle-option ${startingPlayer === 'O' ? 'active player-o' : ''}`}
-            onClick={() => isToggleEnabled && setStartingPlayer('O')}
-            disabled={!isToggleEnabled}
+            onClick={() => isStartsWithEnabled && setStartingPlayer('O')}
+            disabled={!isStartsWithEnabled}
           >
             O
           </button>
