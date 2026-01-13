@@ -20,14 +20,14 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
         <label className="text-base font-medium">Opponent:</label>
         <div className={`flex rounded-lg overflow-hidden border-2 border-white ${!isToggleEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
           <button
-            className={`flex-1 py-3 px-4 border-0 bg-transparent text-white text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'ai' ? 'bg-[#dc3545] text-white' : 'hover:bg-white/10 hover:enabled:bg-white/10'}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'ai' ? 'bg-red-600 text-white' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isToggleEnabled && setOpponentType('ai')}
             disabled={!isToggleEnabled}
           >
             AI
           </button>
           <button
-            className={`flex-1 py-3 px-4 border-0 bg-transparent text-white text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'human' ? 'bg-[#007bff] text-white' : 'hover:bg-white/10 hover:enabled:bg-white/10'}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'human' ? 'bg-white text-black' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isToggleEnabled && setOpponentType('human')}
             disabled={!isToggleEnabled}
           >
@@ -39,14 +39,14 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
         <label className="text-base font-medium">Starts with:</label>
         <div className={`flex rounded-lg overflow-hidden border-2 border-white ${!isStartsWithEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
           <button
-            className={`flex-1 py-3 px-4 border-0 bg-transparent text-white text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'X' ? 'bg-[#28a745] text-white' : 'hover:bg-white/10 hover:enabled:bg-white/10'}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'X' ? 'bg-white text-black' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isStartsWithEnabled && setStartingPlayer('X')}
             disabled={!isStartsWithEnabled}
           >
             X
           </button>
           <button
-            className={`flex-1 py-3 px-4 border-0 bg-transparent text-white text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'O' ? 'bg-[#ffc107] text-white' : 'hover:bg-white/10 hover:enabled:bg-white/10'}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'O' ? 'bg-red-600 text-white' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isStartsWithEnabled && setStartingPlayer('O')}
             disabled={!isStartsWithEnabled}
           >
