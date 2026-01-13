@@ -2,7 +2,6 @@ import type { NextPage } from 'next'
 import { useState } from 'react'
 import Board from '../components/board'
 import ControlArea from '../components/controlarea'
-import styles from '../styles/Home.module.css'
 
 const Home: NextPage = () => {
   const [opponentType, setOpponentType] = useState<'human' | 'ai'>('human')
@@ -11,8 +10,8 @@ const Home: NextPage = () => {
   const [explorationRate, setExplorationRate] = useState<number>(0.5)
 
   return (
-    <div className={styles.container}>
-      <div className={styles.gameLayout}>
+    <div className="min-h-screen p-2 flex flex-col justify-center items-center h-screen max-md:overflow-y-auto max-md:overflow-x-hidden max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden">
+      <div className="flex flex-row items-center justify-center gap-8 max-md:flex-col-reverse max-md:gap-4">
         <ControlArea 
           opponentType={opponentType}
           setOpponentType={setOpponentType}

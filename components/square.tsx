@@ -6,7 +6,7 @@ interface SquareType {
 export default function Square ({value, onClick}: SquareType) {
   return (
     <button 
-      className="btn btn-overlay text-white square" 
+      className="w-full h-full text-center text-6xl max-[500px]:text-[32px] max-[500px]:p-0 max-[500px]:leading-none max-[500px]:h-[74px] max-[500px]:border-0 max-[500px]:flex max-[500px]:items-center max-[500px]:justify-center text-white bg-transparent border-0 cursor-pointer hover:opacity-80 transition-opacity" 
       onClick={onClick}
     >
       {value}
