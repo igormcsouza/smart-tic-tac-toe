@@ -120,12 +120,16 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
         const timer = setTimeout(() => {
           let aiMove: number;
           
-          // Epsilon-greedy strategy
-          // explorationRate = probability of exploring (random move)
-          // 1 - explorationRate = probability of exploiting (best move)
+          // Epsilon-greedy strategy:
+          // explorationRate controls the balance between exploration and exploitation
+          // - High explorationRate (e.g., 1.0): AI explores more with random moves
+          // - Low explorationRate (e.g., 0.0): AI exploits more with best strategic moves
+          // - Medium explorationRate (e.g., 0.5): Balanced approach
           if (Math.random() < explorationRate) {
+            // Explore: make a random move
             aiMove = getRandomMove(squares);
           } else {
+            // Exploit: make the best strategic move
             aiMove = getBestMove(squares, aiSymbol);
           }
           

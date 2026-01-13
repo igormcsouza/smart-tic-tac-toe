@@ -168,7 +168,7 @@ table {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.exploration-slider.disabled {
+.exploration-slider:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }

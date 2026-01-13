@@ -66,7 +66,7 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
           value={explorationRate}
           onChange={(e) => setExplorationRate(parseFloat(e.target.value))}
           disabled={!isSliderEnabled}
-          className={`exploration-slider ${!isSliderEnabled ? 'disabled' : ''}`}
+          className="exploration-slider"
         />
       </div>
     </div>
