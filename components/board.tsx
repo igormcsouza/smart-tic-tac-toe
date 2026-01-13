@@ -53,6 +53,11 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
     return startingPlayer;
   }, [opponentType, startingPlayer]);
 
+  // Helper function to get AI's symbol (opposite of human's symbol)
+  const getAiSymbol = useCallback((): 'X' | 'O' => {
+    return startingPlayer === 'X' ? 'O' : 'X';
+  }, [startingPlayer]);
+
   // Update game state
   useEffect(() => {
     if (gameOver) {
@@ -67,8 +72,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   // AI move logic
   useEffect(() => {
     if (opponentType === 'ai' && !gameOver) {
-      // Determine AI's symbol (opposite of human player's symbol)
-      const aiSymbol = startingPlayer === 'X' ? 'O' : 'X';
+      const aiSymbol = getAiSymbol();
       
       if (turnPlayer === aiSymbol) {
         const timer = setTimeout(() => {
@@ -83,7 +87,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
         return () => clearTimeout(timer);
       }
     }
-  }, [opponentType, turnPlayer, squares, gameOver, startingPlayer]);
+  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol]);
 
   // Reset game when starting player changes
   useEffect(() => {
@@ -94,9 +98,9 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
     
-    // In AI mode, determine AI's symbol and prevent clicking when it's AI's turn
+    // In AI mode, prevent clicking when it's AI's turn
     if (opponentType === 'ai') {
-      const aiSymbol = startingPlayer === 'X' ? 'O' : 'X';
+      const aiSymbol = getAiSymbol();
       if (turnPlayer === aiSymbol) return;
     }
     
