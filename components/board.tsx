@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Square from "./square";
 
 function calculateWinner(squares: string[]): string | null {
@@ -43,6 +43,16 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   const isDraw = !winner && squares.every(square => square !== "");
   const gameOver = winner || isDraw;
 
+  // Helper function to determine initial turn player
+  const getInitialTurnPlayer = useCallback(() => {
+    // In AI mode, if human chose O, the first turn is X (AI's turn)
+    // Otherwise, first turn matches the starting player
+    if (opponentType === 'ai' && startingPlayer === 'O') {
+      return 'X'; // AI goes first
+    }
+    return startingPlayer;
+  }, [opponentType, startingPlayer]);
+
   // Update game state
   useEffect(() => {
     if (gameOver) {
@@ -78,14 +88,8 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   // Reset game when starting player changes
   useEffect(() => {
     setSquares(Array(9).fill(""));
-    // In AI mode, if human chose O, the first turn is X (AI's turn)
-    // Otherwise, first turn matches the starting player
-    if (opponentType === 'ai' && startingPlayer === 'O') {
-      setTurnPlayer('X'); // AI goes first
-    } else {
-      setTurnPlayer(startingPlayer);
-    }
-  }, [startingPlayer, opponentType]);
+    setTurnPlayer(getInitialTurnPlayer());
+  }, [startingPlayer, opponentType, getInitialTurnPlayer]);
 
   const handleClick = (index: number) => {
     if (squares[index] || gameOver) return;
@@ -105,13 +109,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer }: B
   const handleReset = () => {
     if (gameOver) {
       setSquares(Array(9).fill(""));
-      // In AI mode, if human chose O, the first turn is X (AI's turn)
-      // Otherwise, first turn matches the starting player
-      if (opponentType === 'ai' && startingPlayer === 'O') {
-        setTurnPlayer('X'); // AI goes first
-      } else {
-        setTurnPlayer(startingPlayer);
-      }
+      setTurnPlayer(getInitialTurnPlayer());
     }
   };
 
