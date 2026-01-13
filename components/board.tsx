@@ -178,35 +178,35 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
       <table className={`my-1.5 mx-2.5 max-[500px]:border-spacing-0 ${gameOver ? 'opacity-50' : 'opacity-100'}`}>
         <tbody>
           <tr>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0">
+            <td className="board-cell">
               <Square value={squares[0]} onClick={() => handleClick(0)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0 border-l-2 border-r-2 border-white">
+            <td className="board-cell border-l-2 border-r-2 border-white">
               <Square value={squares[1]} onClick={() => handleClick(1)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0">
+            <td className="board-cell">
               <Square value={squares[2]} onClick={() => handleClick(2)}/>
             </td>
           </tr>
           <tr>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0 border-t-2 border-b-2 border-white">
+            <td className="board-cell border-t-2 border-b-2 border-white">
               <Square value={squares[3]} onClick={() => handleClick(3)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0 border-l-2 border-r-2 border-t-2 border-b-2 border-white">
+            <td className="board-cell border-l-2 border-r-2 border-t-2 border-b-2 border-white">
               <Square value={squares[4]} onClick={() => handleClick(4)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0 border-t-2 border-b-2 border-white">
+            <td className="board-cell border-t-2 border-b-2 border-white">
               <Square value={squares[5]} onClick={() => handleClick(5)}/>
             </td>
           </tr>
           <tr>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0">
+            <td className="board-cell">
               <Square value={squares[6]} onClick={() => handleClick(6)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0 border-l-2 border-r-2 border-white">
+            <td className="board-cell border-l-2 border-r-2 border-white">
               <Square value={squares[7]} onClick={() => handleClick(7)}/>
             </td>
-            <td className="w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0">
+            <td className="board-cell">
               <Square value={squares[8]} onClick={() => handleClick(8)}/>
             </td>
           </tr>

@@ -5,11 +5,16 @@
 @layer base {
   html,
   body {
-    @apply p-0 m-0 bg-[#1f2420];
+    @apply p-0 m-0 bg-dark-bg;
   }
 }
 
 @layer components {
+  /* Base table cell styles for tic-tac-toe board */
+  .board-cell {
+    @apply w-[150px] h-[150px] max-[500px]:w-[75px] max-[500px]:h-[75px] max-[500px]:p-0;
+  }
+
   /* Custom range slider styles that can't be easily done with Tailwind utilities */
   .exploration-slider {
     @apply w-full h-1.5 rounded-md outline-none cursor-pointer;
