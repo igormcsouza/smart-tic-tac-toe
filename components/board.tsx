@@ -80,6 +80,7 @@ interface BoardProps {
 export default function Board ({ opponentType, setGameState, startingPlayer, explorationRate }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   const [turnPlayer, setTurnPlayer] = useState(startingPlayer);
+  const [aiMoves, setAiMoves] = useState<Set<number>>(new Set());
   
   const winner = calculateWinner(squares);
   const isDraw = !winner && squares.every(square => square !== "");
@@ -138,6 +139,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
             newSquares[aiMove] = aiSymbol;
             setSquares(newSquares);
             setTurnPlayer(aiSymbol === 'X' ? 'O' : 'X');
+            setAiMoves(prev => new Set(prev).add(aiMove));
           }
         }, 500); // Small delay to make AI move visible
         return () => clearTimeout(timer);
@@ -149,6 +151,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
   useEffect(() => {
     setSquares(Array(9).fill(""));
     setTurnPlayer(getInitialTurnPlayer());
+    setAiMoves(new Set());
   }, [startingPlayer, opponentType, getInitialTurnPlayer]);
 
   const handleClick = (index: number) => {
@@ -170,63 +173,51 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
     if (gameOver) {
       setSquares(Array(9).fill(""));
       setTurnPlayer(getInitialTurnPlayer());
+      setAiMoves(new Set());
     }
   };
 
   return (
-    <div onClick={handleReset} style={{ position: 'relative' }}>
-      <table style={{ opacity: gameOver ? 0.5 : 1 }}>
+    <div onClick={handleReset} className="relative">
+      <table className={`my-1.5 mx-2.5 max-[500px]:border-spacing-0 ${gameOver ? 'opacity-50' : 'opacity-100'}`}>
         <tbody>
           <tr>
-            <td>
-              <Square value={squares[0]} onClick={() => handleClick(0)}/>
+            <td className="board-cell">
+              <Square value={squares[0]} onClick={() => handleClick(0)} isAiPiece={opponentType === 'ai' && aiMoves.has(0)} />
             </td>
-            <td className="vert">
-              <Square value={squares[1]} onClick={() => handleClick(1)}/>
+            <td className="board-cell border-l-2 border-r-2 border-white">
+              <Square value={squares[1]} onClick={() => handleClick(1)} isAiPiece={opponentType === 'ai' && aiMoves.has(1)} />
             </td>
-            <td>
-              <Square value={squares[2]} onClick={() => handleClick(2)}/>
-            </td>
-          </tr>
-          <tr>
-            <td className="hori">
-              <Square value={squares[3]} onClick={() => handleClick(3)}/>
-            </td>
-            <td className="vert hori">
-              <Square value={squares[4]} onClick={() => handleClick(4)}/>
-            </td>
-            <td className="hori">
-              <Square value={squares[5]} onClick={() => handleClick(5)}/>
+            <td className="board-cell">
+              <Square value={squares[2]} onClick={() => handleClick(2)} isAiPiece={opponentType === 'ai' && aiMoves.has(2)} />
             </td>
           </tr>
           <tr>
-            <td>
-              <Square value={squares[6]} onClick={() => handleClick(6)}/>
+            <td className="board-cell border-t-2 border-b-2 border-white">
+              <Square value={squares[3]} onClick={() => handleClick(3)} isAiPiece={opponentType === 'ai' && aiMoves.has(3)} />
             </td>
-            <td className="vert">
-              <Square value={squares[7]} onClick={() => handleClick(7)}/>
+            <td className="board-cell border-l-2 border-r-2 border-t-2 border-b-2 border-white">
+              <Square value={squares[4]} onClick={() => handleClick(4)} isAiPiece={opponentType === 'ai' && aiMoves.has(4)} />
             </td>
-            <td>
-              <Square value={squares[8]} onClick={() => handleClick(8)}/>
+            <td className="board-cell border-t-2 border-b-2 border-white">
+              <Square value={squares[5]} onClick={() => handleClick(5)} isAiPiece={opponentType === 'ai' && aiMoves.has(5)} />
+            </td>
+          </tr>
+          <tr>
+            <td className="board-cell">
+              <Square value={squares[6]} onClick={() => handleClick(6)} isAiPiece={opponentType === 'ai' && aiMoves.has(6)} />
+            </td>
+            <td className="board-cell border-l-2 border-r-2 border-white">
+              <Square value={squares[7]} onClick={() => handleClick(7)} isAiPiece={opponentType === 'ai' && aiMoves.has(7)} />
+            </td>
+            <td className="board-cell">
+              <Square value={squares[8]} onClick={() => handleClick(8)} isAiPiece={opponentType === 'ai' && aiMoves.has(8)} />
             </td>
           </tr>
         </tbody>
       </table>
       {gameOver && (
-        <div style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          backgroundColor: 'rgba(0, 0, 0, 0.8)',
-          color: 'white',
-          padding: '30px 50px',
-          borderRadius: '10px',
-          fontSize: '32px',
-          fontWeight: 'bold',
-          textAlign: 'center',
-          pointerEvents: 'none'
-        }}>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black/80 text-white py-[30px] px-[50px] rounded-[10px] text-[32px] font-bold text-center pointer-events-none">
           {winner ? `${winner} won!` : 'Draw!'}
         </div>
       )}

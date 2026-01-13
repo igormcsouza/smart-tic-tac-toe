@@ -1,6 +1,5 @@
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
-import 'bootstrap/dist/css/bootstrap.css'  // add bootstrap css 
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps) {

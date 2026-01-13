@@ -14,20 +14,20 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
   const isSliderEnabled = isStartsWithEnabled;
 
   return (
-    <div className="control-area">
-      <h2 className="control-area-title">Manage your Game</h2>
-      <div className="toggle-container">
-        <label className="toggle-label">Opponent:</label>
-        <div className={`toggle-switch ${!isToggleEnabled ? 'disabled' : ''}`}>
+    <div className="min-w-[200px] min-h-[100px] max-[500px]:min-w-full text-white border-2 border-white rounded-lg p-4">
+      <h2 className="text-center m-0 mb-4 text-xl">Manage your Game</h2>
+      <div className="flex flex-col gap-2">
+        <label className="text-base font-medium">Opponent:</label>
+        <div className={`flex rounded-lg overflow-hidden border-2 border-white ${!isToggleEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
           <button
-            className={`toggle-option ${opponentType === 'ai' ? 'active ai' : ''}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'ai' ? 'bg-red-600 text-white' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isToggleEnabled && setOpponentType('ai')}
             disabled={!isToggleEnabled}
           >
             AI
           </button>
           <button
-            className={`toggle-option ${opponentType === 'human' ? 'active human' : ''}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${opponentType === 'human' ? 'bg-white text-black' : 'bg-transparent text-white hover:bg-white/10 hover:enabled:bg-white/10'}`}
             onClick={() => isToggleEnabled && setOpponentType('human')}
             disabled={!isToggleEnabled}
           >
@@ -35,18 +35,18 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
           </button>
         </div>
       </div>
-      <div className="toggle-container">
-        <label className="toggle-label">Starts with:</label>
-        <div className={`toggle-switch ${!isStartsWithEnabled ? 'disabled' : ''}`}>
+      <div className="flex flex-col gap-2">
+        <label className="text-base font-medium">Starts with:</label>
+        <div className={`flex rounded-lg overflow-hidden border-2 border-white ${!isStartsWithEnabled ? 'opacity-50 cursor-not-allowed' : ''}`}>
           <button
-            className={`toggle-option ${startingPlayer === 'X' ? 'active player-x' : ''}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'X' ? 'bg-white text-black' : 'bg-red-400 text-white hover:enabled:bg-red-500'}`}
             onClick={() => isStartsWithEnabled && setStartingPlayer('X')}
             disabled={!isStartsWithEnabled}
           >
             X
           </button>
           <button
-            className={`toggle-option ${startingPlayer === 'O' ? 'active player-o' : ''}`}
+            className={`flex-1 py-3 px-4 border-0 text-base cursor-pointer transition-all duration-300 font-medium disabled:cursor-not-allowed ${startingPlayer === 'O' ? 'bg-white text-black' : 'bg-red-400 text-white hover:enabled:bg-red-500'}`}
             onClick={() => isStartsWithEnabled && setStartingPlayer('O')}
             disabled={!isStartsWithEnabled}
           >
@@ -54,9 +54,9 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
           </button>
         </div>
       </div>
-      <div className="slider-container">
-        <label className="slider-label">
-          Exploration Rate: <span className="slider-value">{explorationRate.toFixed(2)}</span>
+      <div className="flex flex-col gap-2 mt-4">
+        <label className="text-base font-medium">
+          Exploration Rate: <span className="font-bold text-[#28a745]">{explorationRate.toFixed(2)}</span>
         </label>
         <input
           type="range"
