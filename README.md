@@ -13,16 +13,9 @@ This project is perfect for understanding how AI can learn and make decisions in
 
 ## Why Reinforcement Learning for Games?
 
-Reinforcement Learning is particularly effective for games because:
+Reinforcement Learning (RL) is a type of machine learning where an agent learns to make decisions by interacting with an environment and receiving feedback in the form of rewards or penalties. Unlike supervised learning where the model learns from labeled examples, RL agents learn through trial and error, discovering which actions lead to the best outcomes. This makes RL particularly powerful for scenarios where the optimal strategy isn't known in advance but must be discovered through experience.
 
-- **Pattern Recognition**: AI learns to recognize winning patterns and blocking strategies
-- **Decision Making**: The AI evaluates each move and learns optimal strategies over time
-- **Adaptability**: By adjusting the exploration rate, you can control how "creative" or "strategic" the AI plays
-
-In this implementation, the AI uses an **epsilon-greedy approach**:
-- High exploration rate (e.g., 1.0) → AI experiments with random moves (great for learning)
-- Low exploration rate (e.g., 0.0) → AI uses its best strategic moves (optimal play)
-- Balanced rate (e.g., 0.5) → Mix of experimentation and strategy
+RL has achieved remarkable success in gaming, demonstrating superhuman performance in complex games. Perhaps the most famous example is DeepMind's AlphaGo, which in 2016 defeated Lee Sedol, one of the world's best Go players, in a historic match. This was considered a major milestone in AI because Go's complexity (with more possible positions than atoms in the universe) was thought to be beyond computer capabilities for decades. RL's ability to learn patterns, develop strategies, and adapt to different playing styles makes it ideal for game environments where decision-making and long-term planning are crucial.
 
 ## Why Tic-Tac-Toe?
 
@@ -35,6 +28,10 @@ Tic-Tac-Toe is an excellent starting point for AI experimentation:
 
 This makes it perfect for learning AI concepts without getting overwhelmed by complexity!
 
+### Solving Tic-Tac-Toe with RL
+
+In reinforcement learning, we solve Tic-Tac-Toe by teaching the AI through a reward system. The AI receives positive rewards for moves that lead to winning positions (like completing three in a row) and negative rewards for moves that result in losses or allow the opponent to win. Over many games, the AI learns to associate certain board positions and moves with good or bad outcomes. This reward-based learning helps the AI discover winning strategies, defensive blocking moves, and optimal opening plays without being explicitly programmed with game rules or strategies—it learns purely from experience and feedback.
+
 ## Technologies Used
 
 This project is built with modern JavaScript/TypeScript technologies:
@@ -45,6 +42,28 @@ This project is built with modern JavaScript/TypeScript technologies:
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework for styling
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Building and Contributing
+
+Want to build this project locally or make changes? Here's what you need to know:
+
+**Project Structure:**
+- `pages/index.tsx` - Main game page and state management
+- `components/board.tsx` - Game board logic and AI implementation
+- `components/controlarea.tsx` - Game controls and settings UI
+- `components/square.tsx` - Individual square component
+- `styles/` - Global styles and Tailwind configuration
+
+**Making Changes:**
+- To modify the AI strategy, edit the `getBestMove()` function in `components/board.tsx`
+- To adjust the UI/styling, update the Tailwind classes in the component files
+- To change game rules or win conditions, modify `calculateWinner()` in `components/board.tsx`
+
+**Development Workflow:**
+1. Install dependencies: `npm install`
+2. Run the dev server: `npm run dev`
+3. Make your changes and see them live at `http://localhost:3000`
+4. Build for production: `npm run build`
 
 ## Getting Started
 
