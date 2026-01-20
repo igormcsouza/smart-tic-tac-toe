@@ -8,6 +8,7 @@ const Home: NextPage = () => {
   const [gameState, setGameState] = useState<'idle' | 'playing' | 'ended'>('idle')
   const [startingPlayer, setStartingPlayer] = useState<'X' | 'O'>('X')
   const [explorationRate, setExplorationRate] = useState<number>(0.5)
+  const [noDrawMode, setNoDrawMode] = useState<boolean>(false)
 
   return (
     <div className="min-h-screen p-2 flex flex-col justify-center items-center h-screen max-md:overflow-y-auto max-md:overflow-x-hidden max-md:[scrollbar-width:none] max-md:[&::-webkit-scrollbar]:hidden">
@@ -20,12 +21,15 @@ const Home: NextPage = () => {
           setStartingPlayer={setStartingPlayer}
           explorationRate={explorationRate}
           setExplorationRate={setExplorationRate}
+          noDrawMode={noDrawMode}
+          setNoDrawMode={setNoDrawMode}
         />
         <Board 
           opponentType={opponentType}
           setGameState={setGameState}
           startingPlayer={startingPlayer}
           explorationRate={explorationRate}
+          noDrawMode={noDrawMode}
         />
       </div>
     </div>

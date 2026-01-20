@@ -6,9 +6,11 @@ interface ControlAreaProps {
   setStartingPlayer: (player: 'X' | 'O') => void;
   explorationRate: number;
   setExplorationRate: (rate: number) => void;
+  noDrawMode: boolean;
+  setNoDrawMode: (mode: boolean) => void;
 }
 
-export default function ControlArea({ opponentType, setOpponentType, gameState, startingPlayer, setStartingPlayer, explorationRate, setExplorationRate }: ControlAreaProps) {
+export default function ControlArea({ opponentType, setOpponentType, gameState, startingPlayer, setStartingPlayer, explorationRate, setExplorationRate, noDrawMode, setNoDrawMode }: ControlAreaProps) {
   const isToggleEnabled = gameState === 'idle' || gameState === 'ended';
   const isStartsWithEnabled = isToggleEnabled && opponentType === 'ai';
   const isSliderEnabled = isStartsWithEnabled;
@@ -68,6 +70,21 @@ export default function ControlArea({ opponentType, setOpponentType, gameState, 
           disabled={!isSliderEnabled}
           className="exploration-slider"
         />
+      </div>
+      <div className="flex flex-col gap-2 mt-4">
+        <label className="flex items-center gap-2 text-base font-medium cursor-pointer">
+          <input
+            type="checkbox"
+            checked={noDrawMode}
+            onChange={(e) => setNoDrawMode(e.target.checked)}
+            disabled={!isToggleEnabled}
+            className="w-5 h-5 cursor-pointer disabled:cursor-not-allowed"
+          />
+          <span className={!isToggleEnabled ? 'opacity-50' : ''}>No Draw Mode</span>
+        </label>
+        <p className={`text-sm text-gray-400 ${!isToggleEnabled ? 'opacity-50' : ''}`}>
+          Pieces fade after 6 moves and are removed to prevent draws
+        </p>
       </div>
     </div>
   )
