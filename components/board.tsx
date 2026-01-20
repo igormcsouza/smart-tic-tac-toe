@@ -75,15 +75,17 @@ interface BoardProps {
   setGameState: (state: 'idle' | 'playing' | 'ended') => void;
   startingPlayer: 'X' | 'O';
   explorationRate: number;
+  noDrawMode: boolean;
 }
 
-export default function Board ({ opponentType, setGameState, startingPlayer, explorationRate }: BoardProps) {
+export default function Board ({ opponentType, setGameState, startingPlayer, explorationRate, noDrawMode }: BoardProps) {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   const [turnPlayer, setTurnPlayer] = useState(startingPlayer);
   const [aiMoves, setAiMoves] = useState<Set<number>>(new Set());
+  const [moveHistory, setMoveHistory] = useState<number[]>([]);
   
   const winner = calculateWinner(squares);
-  const isDraw = !winner && squares.every(square => square !== "");
+  const isDraw = !noDrawMode && !winner && squares.every(square => square !== "");
   const gameOver = winner || isDraw;
 
   // Helper function to determine initial turn player
@@ -136,8 +138,25 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
           
           if (aiMove !== -1) {
             const newSquares = squares.slice();
+            const newMoveHistory = [...moveHistory, aiMove];
+            
+            // In no-draw mode, remove the oldest piece when we have 6+ pieces
+            if (noDrawMode && newMoveHistory.length > 6) {
+              const oldestMove = newMoveHistory.shift()!;
+              newSquares[oldestMove] = "";
+              // Remove from AI moves if it was an AI piece
+              if (aiMoves.has(oldestMove)) {
+                setAiMoves(prev => {
+                  const newSet = new Set(prev);
+                  newSet.delete(oldestMove);
+                  return newSet;
+                });
+              }
+            }
+            
             newSquares[aiMove] = aiSymbol;
             setSquares(newSquares);
+            setMoveHistory(newMoveHistory);
             setTurnPlayer(aiSymbol === 'X' ? 'O' : 'X');
             setAiMoves(prev => new Set(prev).add(aiMove));
           }
@@ -145,13 +164,14 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
         return () => clearTimeout(timer);
       }
     }
-  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol, explorationRate]);
+  }, [opponentType, turnPlayer, squares, gameOver, getAiSymbol, explorationRate, noDrawMode, moveHistory, aiMoves]);
 
   // Reset game when starting player changes
   useEffect(() => {
     setSquares(Array(9).fill(""));
     setTurnPlayer(getInitialTurnPlayer());
     setAiMoves(new Set());
+    setMoveHistory([]);
   }, [startingPlayer, opponentType, getInitialTurnPlayer]);
 
   const handleClick = (index: number) => {
@@ -164,8 +184,25 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
     }
     
     const newSquares = squares.slice();
+    const newMoveHistory = [...moveHistory, index];
+    
+    // In no-draw mode, remove the oldest piece when we have 6+ pieces
+    if (noDrawMode && newMoveHistory.length > 6) {
+      const oldestMove = newMoveHistory.shift()!;
+      newSquares[oldestMove] = "";
+      // Remove from AI moves if it was an AI piece
+      if (aiMoves.has(oldestMove)) {
+        setAiMoves(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(oldestMove);
+          return newSet;
+        });
+      }
+    }
+    
     newSquares[index] = turnPlayer;
     setSquares(newSquares);
+    setMoveHistory(newMoveHistory);
     setTurnPlayer(turnPlayer === "X" ? "O" : "X");
   };
 
@@ -174,6 +211,7 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
       setSquares(Array(9).fill(""));
       setTurnPlayer(getInitialTurnPlayer());
       setAiMoves(new Set());
+      setMoveHistory([]);
     }
   };
 
@@ -183,35 +221,80 @@ export default function Board ({ opponentType, setGameState, startingPlayer, exp
         <tbody>
           <tr>
             <td className="board-cell">
-              <Square value={squares[0]} onClick={() => handleClick(0)} isAiPiece={opponentType === 'ai' && aiMoves.has(0)} />
+              <Square 
+                value={squares[0]} 
+                onClick={() => handleClick(0)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(0)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 0}
+              />
             </td>
             <td className="board-cell border-l-2 border-r-2 border-white">
-              <Square value={squares[1]} onClick={() => handleClick(1)} isAiPiece={opponentType === 'ai' && aiMoves.has(1)} />
+              <Square 
+                value={squares[1]} 
+                onClick={() => handleClick(1)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(1)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 1}
+              />
             </td>
             <td className="board-cell">
-              <Square value={squares[2]} onClick={() => handleClick(2)} isAiPiece={opponentType === 'ai' && aiMoves.has(2)} />
+              <Square 
+                value={squares[2]} 
+                onClick={() => handleClick(2)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(2)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 2}
+              />
             </td>
           </tr>
           <tr>
             <td className="board-cell border-t-2 border-b-2 border-white">
-              <Square value={squares[3]} onClick={() => handleClick(3)} isAiPiece={opponentType === 'ai' && aiMoves.has(3)} />
+              <Square 
+                value={squares[3]} 
+                onClick={() => handleClick(3)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(3)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 3}
+              />
             </td>
             <td className="board-cell border-l-2 border-r-2 border-t-2 border-b-2 border-white">
-              <Square value={squares[4]} onClick={() => handleClick(4)} isAiPiece={opponentType === 'ai' && aiMoves.has(4)} />
+              <Square 
+                value={squares[4]} 
+                onClick={() => handleClick(4)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(4)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 4}
+              />
             </td>
             <td className="board-cell border-t-2 border-b-2 border-white">
-              <Square value={squares[5]} onClick={() => handleClick(5)} isAiPiece={opponentType === 'ai' && aiMoves.has(5)} />
+              <Square 
+                value={squares[5]} 
+                onClick={() => handleClick(5)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(5)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 5}
+              />
             </td>
           </tr>
           <tr>
             <td className="board-cell">
-              <Square value={squares[6]} onClick={() => handleClick(6)} isAiPiece={opponentType === 'ai' && aiMoves.has(6)} />
+              <Square 
+                value={squares[6]} 
+                onClick={() => handleClick(6)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(6)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 6}
+              />
             </td>
             <td className="board-cell border-l-2 border-r-2 border-white">
-              <Square value={squares[7]} onClick={() => handleClick(7)} isAiPiece={opponentType === 'ai' && aiMoves.has(7)} />
+              <Square 
+                value={squares[7]} 
+                onClick={() => handleClick(7)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(7)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 7}
+              />
             </td>
             <td className="board-cell">
-              <Square value={squares[8]} onClick={() => handleClick(8)} isAiPiece={opponentType === 'ai' && aiMoves.has(8)} />
+              <Square 
+                value={squares[8]} 
+                onClick={() => handleClick(8)} 
+                isAiPiece={opponentType === 'ai' && aiMoves.has(8)} 
+                isFaded={noDrawMode && moveHistory.length >= 6 && moveHistory[0] === 8}
+              />
             </td>
           </tr>
         </tbody>
